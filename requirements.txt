@@ -1,0 +1,11 @@
+# Runtime dependencies for Version 1.0 will be added module by module.
+#
+# Module 1 Core Foundation currently uses only the Python standard library.
+#
+# Planned future packages:
+# customtkinter
+# openpyxl
+# reportlab
+# matplotlib
+# pytest
+
