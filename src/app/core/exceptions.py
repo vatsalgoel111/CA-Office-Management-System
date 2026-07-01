@@ -31,3 +31,10 @@ class DatabaseError(CAOfficeCMSError):
 class UnsupportedDatabaseProviderError(DatabaseError):
     """Raised when a configured database provider is not implemented."""
 
+
+class AuthenticationError(CAOfficeCMSError):
+    """Raised when authentication fails."""
+
+
+class AuthorizationError(CAOfficeCMSError):
+    """Raised when a user lacks a required permission."""

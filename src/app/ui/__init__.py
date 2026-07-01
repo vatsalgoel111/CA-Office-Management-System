@@ -15,6 +15,7 @@ from app.ui.components import (
     StatusBadge,
     TopBar,
 )
+from app.ui.login_view import LoginView
 from app.ui.navigation import NavigationItem, NavigationShell
 from app.ui.theme import ThemeManager, theme_manager
 from app.ui.window_manager import WindowManager
@@ -26,6 +27,7 @@ __all__ = [
     "IconButton",
     "InfoCard",
     "LoadingOverlay",
+    "LoginView",
     "NavigationItem",
     "NavigationShell",
     "NotificationToast",

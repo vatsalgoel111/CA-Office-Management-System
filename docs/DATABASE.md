@@ -45,6 +45,7 @@ Stores role definitions.
 | Column | Type | Notes |
 | --- | --- | --- |
 | id | INTEGER PRIMARY KEY | Unique role ID |
+| code | TEXT | Unique stable role code |
 | name | TEXT | Unique role name |
 | description | TEXT | Optional |
 | is_system_role | INTEGER | 1 for built-in roles |

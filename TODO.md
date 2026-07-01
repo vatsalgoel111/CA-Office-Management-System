@@ -2,11 +2,11 @@
 
 ## Current
 
-- Module 1 complete.
-- Continue to Module 2: Authentication and RBAC.
+- Module 2 complete.
+- Continue to Module 3: Application Shell and Dashboard Routing.
 
 ## Next
 
-- Create Module 2 architecture review and plan.
-- Implement authentication only after planning is documented.
-- Use the reusable UI foundation for login screen work.
+- Review application shell architecture.
+- Wire login flow into the window manager.
+- Keep dashboard metrics for the dashboard module.

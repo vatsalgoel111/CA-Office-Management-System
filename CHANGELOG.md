@@ -20,3 +20,7 @@ All notable project changes will be documented here.
 - Added focused unittest coverage for configuration, paths, database initialization, and UI foundation exports.
 - Added standard test runner script and refreshed README foundation status.
 - Added Module 1 review documentation.
+- Added Module 2 authentication and RBAC planning documents.
+- Corrected database documentation for `roles.code`.
+- Added authentication models, repository, service, controller, login view, first-run admin helper, and auth tests.
+- Added Module 2 review documentation.
