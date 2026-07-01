@@ -27,3 +27,5 @@ All notable project changes will be documented here.
 - Added Module 3 application shell and dashboard routing planning documents.
 - Added application shell coordinator, authenticated shell view, and dashboard placeholder route.
 - Added Module 3 review documentation.
+- Added dashboard model, repository, service, controller, dashboard view, and dashboard tests.
+- Added Module 4 review documentation.

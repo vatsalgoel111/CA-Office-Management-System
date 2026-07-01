@@ -16,7 +16,7 @@ from app.ui.components import (
     TopBar,
 )
 from app.ui.app_shell import AppShell
-from app.ui.dashboard_placeholder import DashboardPlaceholder
+from app.ui.dashboard_view import DashboardView
 from app.ui.login_view import LoginView
 from app.ui.navigation import NavigationItem, NavigationShell
 from app.ui.theme import ThemeManager, theme_manager
@@ -26,7 +26,7 @@ __all__ = [
     "ConfirmationDialog",
     "DataTable",
     "AppShell",
-    "DashboardPlaceholder",
+    "DashboardView",
     "FormField",
     "IconButton",
     "InfoCard",

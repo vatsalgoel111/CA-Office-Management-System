@@ -2,10 +2,10 @@
 
 ## Current
 
-- Module 3 complete.
+- Module 4 complete.
 
 ## Next
 
-- Module 4: Dashboard Foundation.
-- Define dashboard service and repository boundaries before UI metrics.
-- Keep dashboard metrics out of UI calculations.
+- Module 5: Client Management Foundation.
+- Build client workflows through model, repository, service, controller, and reusable UI components.
+- Keep Excel import for a later client import step.

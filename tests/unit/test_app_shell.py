@@ -43,7 +43,12 @@ class AppShellTest(unittest.TestCase):
             PermissionCode.REPORTS_VIEW.value,
         )
 
+    def test_app_shell_imports_dashboard_view(self) -> None:
+        from app.ui import DashboardView  # noqa: WPS433
+
+        self.assertIsNotNone(DashboardView)
+
+
 
 if __name__ == "__main__":
     unittest.main()
-
