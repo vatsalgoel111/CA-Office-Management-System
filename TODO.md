@@ -2,10 +2,11 @@
 
 ## Current
 
-- End-of-day review, backup, and Git commit complete.
-- Do not begin the next implementation module today.
+- Module 1 complete.
+- Continue to Module 2: Authentication and RBAC.
 
 ## Next
 
-- Create minimal placeholder startup UI strategy.
-- Keep real login and dashboard screens for later modules.
+- Create Module 2 architecture review and plan.
+- Implement authentication only after planning is documented.
+- Use the reusable UI foundation for login screen work.

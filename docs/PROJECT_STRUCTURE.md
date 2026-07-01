@@ -87,7 +87,7 @@ Domain models and data transfer objects.
 
 ### `src/app/ui/`
 
-CustomTkinter screens and widgets. UI modules must not contain SQL or business rules.
+CustomTkinter theme manager, reusable components, navigation framework, window manager, screens, and widgets. UI modules must not contain SQL or business rules.
 
 ### `src/app/automation/`
 
@@ -158,4 +158,3 @@ Future PostgreSQL/MySQL migration should not require rewriting UI screens or bus
 - `src/app/database/`
 - `src/app/repositories/`
 - configuration in `config/`
-

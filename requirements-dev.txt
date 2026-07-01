@@ -1,5 +1,4 @@
-# Development dependencies will be added when tests are implemented.
+# Module 1 tests currently use Python's standard unittest library.
 #
-# Planned:
+# Planned future dependency:
 # pytest
-

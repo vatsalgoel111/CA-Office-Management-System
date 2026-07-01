@@ -4,9 +4,16 @@ Production-focused Windows desktop software for managing Chartered Accountant of
 
 ## Project Status
 
-Current phase: planning and foundation.
+Current phase: Module 1 project foundation.
 
-No application code will be written until the core planning documents are reviewed and approved.
+Completed foundation work so far:
+
+- Planning documents
+- Scalable `src/app` structure
+- Core startup, configuration, paths, logging, and exceptions
+- SQLite schema and seed initialization
+- Reusable UI foundation
+- Initial automated tests
 
 ## Version Goal
 
@@ -31,12 +38,13 @@ Each module follows this workflow:
 
 1. Planning
 2. Architecture
-3. Database
-4. UI Design
-5. Implementation
-6. Testing
-7. Improvements
-8. Git Commit
+3. Core foundation when needed
+4. Database
+5. UI foundation or design
+6. Implementation
+7. Testing
+8. Improvements
+9. Git Commit
 
 We complete and test one module before moving to the next.
 
@@ -44,3 +52,22 @@ We complete and test one module before moving to the next.
 
 Primary project documents are maintained in the `docs/` folder.
 
+## Development Commands
+
+Use the dedicated virtual environment:
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+```
+
+Run tests:
+
+```powershell
+python scripts\run_tests.py
+```
+
+Check database health:
+
+```powershell
+python scripts\check_database.py
+```

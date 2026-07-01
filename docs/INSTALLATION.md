@@ -24,14 +24,56 @@ Optional but useful for inspecting the SQLite database during development.
 
 ### Python Packages
 
-Planned packages:
+The project uses a dedicated virtual environment named `.venv`.
+
+Create it from the project root if it does not already exist:
+
+```powershell
+python -m venv .venv
+```
+
+Activate it:
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+```
+
+Install runtime dependencies:
+
+```powershell
+pip install -r requirements.txt
+```
+
+Verify CustomTkinter:
+
+```powershell
+python -c "import customtkinter; print(customtkinter.__version__)"
+```
+
+Run automated tests:
+
+```powershell
+python scripts\run_tests.py
+```
+
+Currently required packages:
 
 - CustomTkinter
+
+Planned packages:
+
 - OpenPyXL
 - ReportLab
 - Matplotlib
 - PyInstaller
 - pytest
+
+## Virtual Environment Rules
+
+- Use `.venv` for project commands.
+- Do not commit `.venv`.
+- Run Python commands through the virtual environment during development.
+- If a dependency is needed, add it to `requirements.txt` before relying on it in source code.
 
 ## Installation Workflow
 
@@ -43,4 +85,3 @@ For each required installation, we will document:
 - Recommended options
 - Common mistakes
 - Verification command
-

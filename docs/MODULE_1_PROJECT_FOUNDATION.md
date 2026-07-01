@@ -128,23 +128,19 @@ Why this comes before database: the database location, logging behavior, and err
 
 Create the initial schema file and database initialization design.
 
-### Step 5: UI Design
+### Step 5: UI Foundation
 
-Create only a minimal placeholder startup strategy. No real UI feature screens yet.
+Create theme manager, reusable UI components, window manager, and navigation framework. No real login or dashboard screens yet.
 
-### Step 6: Implementation
+### Step 6: Implementation Review and Testing
 
-Implement configuration, path management, logging, database connection, and initialization script.
+Review the implementation and add focused automated tests for configuration, paths, database initialization, and UI foundation imports.
 
-### Step 7: Testing
+### Step 7: Improvements
 
-Add basic tests for path creation, logging setup, and database initialization.
+Review code quality, docs, developer commands, and edge cases.
 
-### Step 8: Improvements
-
-Review code quality, docs, and edge cases.
-
-### Step 9: Git Commit
+### Step 8: Git Commit
 
 Commit the completed foundation module.
 
@@ -193,4 +189,4 @@ Module 1 is complete only when:
 
 ## Current Status
 
-Step 4 is complete after the initial schema, seed data, database initializer, and integrity check flow are created and verified.
+Step 7 is complete after documentation and developer workflow improvements are applied and verified.
