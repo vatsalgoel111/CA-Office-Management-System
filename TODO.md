@@ -2,10 +2,10 @@
 
 ## Current
 
-- Module 4 complete.
+- Module 5 complete.
 
 ## Next
 
-- Module 5: Client Management Foundation.
-- Build client workflows through model, repository, service, controller, and reusable UI components.
-- Keep Excel import for a later client import step.
+- Module 6: Work Management Foundation.
+- Build work assignment and task status workflows through clean architecture layers.
+- Keep WhatsApp notifications for the later automation module.

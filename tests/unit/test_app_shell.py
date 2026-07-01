@@ -44,9 +44,10 @@ class AppShellTest(unittest.TestCase):
         )
 
     def test_app_shell_imports_dashboard_view(self) -> None:
-        from app.ui import DashboardView  # noqa: WPS433
+        from app.ui import ClientView, DashboardView  # noqa: WPS433
 
         self.assertIsNotNone(DashboardView)
+        self.assertIsNotNone(ClientView)
 
 
 

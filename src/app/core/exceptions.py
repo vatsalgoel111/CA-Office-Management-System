@@ -38,3 +38,7 @@ class AuthenticationError(CAOfficeCMSError):
 
 class AuthorizationError(CAOfficeCMSError):
     """Raised when a user lacks a required permission."""
+
+
+class ValidationError(CAOfficeCMSError):
+    """Raised when user-provided data fails validation."""

@@ -4,17 +4,21 @@ Module: app.ui.app_shell
 Author: CA Office CMS Development Team
 Created Date: 2026-07-02
 Last Modified: 2026-07-02
-Dependencies: customtkinter, app.constants, app.controllers, app.models.session, app.repositories, app.services, app.ui.
+Dependencies: customtkinter, app.constants, app.controllers, app.database, app.models.session, app.repositories, app.services, app.ui.
 """
 
 import customtkinter as ctk
 
 from app.constants import PermissionCode
+from app.controllers.client_controller import ClientController
 from app.controllers.dashboard_controller import DashboardController
-from app.models.session import UserSession
-from app.repositories.dashboard_repository import DashboardRepository
-from app.services.dashboard_service import DashboardService
 from app.database.connection import DatabaseConnectionManager
+from app.models.session import UserSession
+from app.repositories.client_repository import ClientRepository
+from app.repositories.dashboard_repository import DashboardRepository
+from app.services.client_service import ClientService
+from app.services.dashboard_service import DashboardService
+from app.ui.client_view import ClientView
 from app.ui.dashboard_view import DashboardView
 from app.ui.navigation import NavigationItem, NavigationShell
 from app.ui.theme import theme_manager
@@ -43,6 +47,10 @@ class AppShell(ctk.CTkFrame):
             DashboardService(DashboardRepository(database)),
             session,
         )
+        self.client_controller = ClientController(
+            ClientService(ClientRepository(database)),
+            session,
+        )
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
 
@@ -65,6 +73,13 @@ class AppShell(ctk.CTkFrame):
 
         if route_key == "dashboard":
             DashboardView(self.shell.content, self.dashboard_controller).pack(
+                fill="both",
+                expand=True,
+            )
+            return
+
+        if route_key == "clients":
+            ClientView(self.shell.content, self.client_controller).pack(
                 fill="both",
                 expand=True,
             )

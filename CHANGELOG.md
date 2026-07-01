@@ -29,3 +29,5 @@ All notable project changes will be documented here.
 - Added Module 3 review documentation.
 - Added dashboard model, repository, service, controller, dashboard view, and dashboard tests.
 - Added Module 4 review documentation.
+- Added client model, repository, service, controller, client view, route wiring, and client tests.
+- Added Module 5 review documentation.
