@@ -15,3 +15,4 @@ All notable project changes will be documented here.
 - Added Module 1 core foundation: entry point, startup sequence, config, paths, logging, exceptions, constants, dependency files, and database connection abstraction.
 - Added initial SQLite schema, RBAC seed data, database initializer, integrity check, and local initialization script.
 - Added developer database health check script.
+- Added UI design system standards document.
