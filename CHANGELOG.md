@@ -24,3 +24,6 @@ All notable project changes will be documented here.
 - Corrected database documentation for `roles.code`.
 - Added authentication models, repository, service, controller, login view, first-run admin helper, and auth tests.
 - Added Module 2 review documentation.
+- Added Module 3 application shell and dashboard routing planning documents.
+- Added application shell coordinator, authenticated shell view, and dashboard placeholder route.
+- Added Module 3 review documentation.

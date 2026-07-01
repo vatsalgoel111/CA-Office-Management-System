@@ -2,11 +2,10 @@
 
 ## Current
 
-- Module 2 complete.
-- Continue to Module 3: Application Shell and Dashboard Routing.
+- Module 3 complete.
 
 ## Next
 
-- Review application shell architecture.
-- Wire login flow into the window manager.
-- Keep dashboard metrics for the dashboard module.
+- Module 4: Dashboard Foundation.
+- Define dashboard service and repository boundaries before UI metrics.
+- Keep dashboard metrics out of UI calculations.
