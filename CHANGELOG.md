@@ -41,3 +41,5 @@ All notable project changes will be documented here.
 - Added Module 9 review documentation.
 - Added report models, repository, service, controller, view, CSV export, and report tests.
 - Added Module 10 review documentation.
+- Added audit log models, repository, service, controller, viewer route, and audit tests.
+- Added Module 11 review documentation.

@@ -2,10 +2,10 @@
 
 ## Current
 
-- Module 10 complete.
+- Module 11 complete.
 
 ## Next
 
-- Module 11: Audit Log Foundation.
-- Build audit log repository/service, record key business actions, and add read-only audit viewer.
-- Keep advanced filtering/export of audit logs for the reporting iteration.
+- Module 12: Automatic Backup Foundation.
+- Build SQLite backup service, manual backup action, retention cleanup, and backup verification tests.
+- Keep scheduled background backups for the automation engine module.

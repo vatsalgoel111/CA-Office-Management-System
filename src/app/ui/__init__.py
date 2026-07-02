@@ -15,6 +15,7 @@ from app.ui.components import (
     StatusBadge,
     TopBar,
 )
+from app.ui.audit_view import AuditView
 from app.ui.app_shell import AppShell
 from app.ui.billing_view import BillingView
 from app.ui.client_view import ClientView
@@ -31,6 +32,7 @@ from app.ui.work_view import WorkView
 __all__ = [
     "ConfirmationDialog",
     "DataTable",
+    "AuditView",
     "AppShell",
     "BillingView",
     "ClientView",
