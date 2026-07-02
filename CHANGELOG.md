@@ -31,3 +31,5 @@ All notable project changes will be documented here.
 - Added Module 4 review documentation.
 - Added client model, repository, service, controller, client view, route wiring, and client tests.
 - Added Module 5 review documentation.
+- Added work model, repository, service, controller, work view, route wiring, and work tests.
+- Added Module 6 review documentation.

@@ -8,7 +8,7 @@ Dependencies: dataclasses, typing, customtkinter, app.ui.components, app.ui.them
 """
 
 from dataclasses import dataclass
-from typing import Callable, Iterable, Optional, Sequence, Set
+from typing import Callable, Iterable, Optional, Sequence, Set, Tuple, Union
 
 import customtkinter as ctk
 
@@ -22,7 +22,7 @@ class NavigationItem:
 
     key: str
     label: str
-    required_permission: Optional[str] = None
+    required_permission: Optional[Union[str, Tuple[str, ...]]] = None
 
 
 class NavigationShell(ctk.CTkFrame):
@@ -53,7 +53,10 @@ class NavigationShell(ctk.CTkFrame):
         self.content.grid(row=1, column=1, sticky="nsew")
 
         for item in items:
-            if item.required_permission and item.required_permission not in permissions:
+            if item.required_permission and not self._can_show_item(
+                item.required_permission,
+                permissions,
+            ):
                 continue
             self.sidebar.add_item(
                 item.label,
@@ -61,3 +64,11 @@ class NavigationShell(ctk.CTkFrame):
                 active=item.key == active_key,
             )
 
+    def _can_show_item(
+        self,
+        required_permission: Union[str, Tuple[str, ...]],
+        user_permissions: Set[str],
+    ) -> bool:
+        if isinstance(required_permission, str):
+            return required_permission in user_permissions
+        return any(permission in user_permissions for permission in required_permission)

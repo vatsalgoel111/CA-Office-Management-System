@@ -2,10 +2,10 @@
 
 ## Current
 
-- Module 5 complete.
+- Module 6 complete.
 
 ## Next
 
-- Module 6: Work Management Foundation.
-- Build work assignment and task status workflows through clean architecture layers.
-- Keep WhatsApp notifications for the later automation module.
+- Module 7: Staff Management Foundation.
+- Build staff listing, create-user workflow, role assignment, activation/deactivation, and staff lookup support.
+- Improve Work assignment staff selection after the staff management layer is available.

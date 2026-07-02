@@ -22,6 +22,7 @@ from app.ui.login_view import LoginView
 from app.ui.navigation import NavigationItem, NavigationShell
 from app.ui.theme import ThemeManager, theme_manager
 from app.ui.window_manager import WindowManager
+from app.ui.work_view import WorkView
 
 __all__ = [
     "ConfirmationDialog",
@@ -45,5 +46,6 @@ __all__ = [
     "ThemeManager",
     "TopBar",
     "WindowManager",
+    "WorkView",
     "theme_manager",
 ]
