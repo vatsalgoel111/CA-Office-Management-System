@@ -6,7 +6,7 @@ During development, the app will run from source code.
 
 ## Production Mode
 
-Version 1.0 will be packaged as a Windows executable using PyInstaller.
+Version 1.0 is packaged as a Windows executable using PyInstaller and can be wrapped in an Inno Setup installer.
 
 ## Production Directory Strategy
 
@@ -74,9 +74,47 @@ Recommended:
 - Do not log plaintext passwords.
 - Do not log confidential client documents.
 
+## Build Executable
+
+From the project root:
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install -r requirements-dev.txt
+.\.venv\Scripts\python.exe scripts\release_preflight.py
+.\.venv\Scripts\python.exe scripts\build_windows.py
+```
+
+Expected executable:
+
+```text
+dist\CAOfficeCMS\CAOfficeCMS.exe
+```
+
+## Build Installer
+
+Install Inno Setup from the official source:
+
+```text
+https://jrsoftware.org/isinfo.php
+```
+
+Compile:
+
+```text
+installer\CAOfficeCMS.iss
+```
+
+Expected installer:
+
+```text
+dist\installer\CAOfficeCMSSetup-1.0.0.exe
+```
+
 ## Deployment Checklist
 
+- Run release preflight.
 - Build executable.
+- Build installer.
 - Verify database path.
 - Verify backup path.
 - Verify log path.
@@ -85,7 +123,5 @@ Recommended:
 - Verify database integrity check.
 - Verify backup creation.
 - Verify restore process using test data.
-- Verify sample Excel export.
-- Verify sample PDF export.
+- Verify sample CSV export.
 - Verify notification failure does not crash the app.
-

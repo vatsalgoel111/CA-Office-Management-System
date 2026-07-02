@@ -56,16 +56,31 @@ Run automated tests:
 python scripts\run_tests.py
 ```
 
-Currently required packages:
+Currently required runtime packages:
 
 - CustomTkinter
 
-Planned packages:
+Development packaging packages:
+
+- PyInstaller
+
+Install packaging dependencies only on the build machine:
+
+```powershell
+pip install -r requirements-dev.txt
+```
+
+Verify PyInstaller:
+
+```powershell
+python -m PyInstaller --version
+```
+
+Planned future packages:
 
 - OpenPyXL
 - ReportLab
 - Matplotlib
-- PyInstaller
 - pytest
 
 ## Virtual Environment Rules

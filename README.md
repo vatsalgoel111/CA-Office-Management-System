@@ -4,16 +4,21 @@ Production-focused Windows desktop software for managing Chartered Accountant of
 
 ## Project Status
 
-Current phase: Module 1 project foundation.
+Current phase: Version 1.0 production deployment preparation.
 
-Completed foundation work so far:
+Completed Version 1.0 foundations:
 
-- Planning documents
-- Scalable `src/app` structure
-- Core startup, configuration, paths, logging, and exceptions
-- SQLite schema and seed initialization
-- Reusable UI foundation
-- Initial automated tests
+- Login and role-based access
+- Dashboard
+- Client, staff, work, billing, and collection management
+- Reports with CSV export
+- Audit log
+- Verified SQLite backups
+- Reminder foundation
+- Notification and WhatsApp queue foundation
+- Settings
+- Reusable professional UI foundation
+- Automated integration and unit tests
 
 ## Version Goal
 
@@ -70,4 +75,16 @@ Check database health:
 
 ```powershell
 python scripts\check_database.py
+```
+
+Run release preflight:
+
+```powershell
+python scripts\release_preflight.py
+```
+
+Build Windows executable after installing development packaging dependencies:
+
+```powershell
+python scripts\build_windows.py
 ```

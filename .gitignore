@@ -17,6 +17,7 @@ env/
 build/
 dist/
 *.spec
+!packaging/*.spec
 
 # Local runtime data
 data/*.sqlite3

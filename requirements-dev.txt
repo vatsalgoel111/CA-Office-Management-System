@@ -1,4 +1,1 @@
-# Module 1 tests currently use Python's standard unittest library.
-#
-# Planned future dependency:
-# pytest
+pyinstaller>=6.0,<7.0

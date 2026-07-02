@@ -11,7 +11,7 @@ from enum import Enum
 
 
 APP_NAME = "CA Office Management System"
-APP_VERSION = "0.1.0-foundation"
+APP_VERSION = "1.0.0"
 APP_AUTHOR = "CA Office CMS Development Team"
 
 
@@ -73,4 +73,3 @@ class PermissionCode(str, Enum):
 
 DEFAULT_DATABASE_FILENAME = "ca_office_cms.sqlite3"
 DEFAULT_LOG_FILENAME = "app.log"
-
