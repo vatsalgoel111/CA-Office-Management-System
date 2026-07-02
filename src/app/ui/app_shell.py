@@ -14,20 +14,24 @@ from app.controllers.billing_controller import BillingController
 from app.controllers.client_controller import ClientController
 from app.controllers.collection_controller import CollectionController
 from app.controllers.dashboard_controller import DashboardController
+from app.controllers.report_controller import ReportController
 from app.controllers.staff_controller import StaffController
 from app.controllers.work_controller import WorkController
 from app.database.connection import DatabaseConnectionManager
+from app.core.paths import AppPaths
 from app.models.session import UserSession
 from app.repositories.client_repository import ClientRepository
 from app.repositories.billing_repository import BillingRepository
 from app.repositories.collection_repository import CollectionRepository
 from app.repositories.dashboard_repository import DashboardRepository
+from app.repositories.report_repository import ReportRepository
 from app.repositories.user_repository import UserRepository
 from app.repositories.work_repository import WorkRepository
 from app.services.billing_service import BillingService
 from app.services.client_service import ClientService
 from app.services.collection_service import CollectionService
 from app.services.dashboard_service import DashboardService
+from app.services.report_service import ReportService
 from app.services.staff_service import StaffService
 from app.services.work_service import WorkService
 from app.ui.billing_view import BillingView
@@ -35,6 +39,7 @@ from app.ui.client_view import ClientView
 from app.ui.collection_view import CollectionView
 from app.ui.dashboard_view import DashboardView
 from app.ui.navigation import NavigationItem, NavigationShell
+from app.ui.report_view import ReportView
 from app.ui.staff_view import StaffView
 from app.ui.theme import theme_manager
 from app.ui.work_view import WorkView
@@ -69,6 +74,7 @@ class AppShell(ctk.CTkFrame):
         master,
         session: UserSession,
         database: DatabaseConnectionManager,
+        paths: AppPaths,
         **kwargs,
     ) -> None:
         super().__init__(master, fg_color=theme_manager.color("bg"), **kwargs)
@@ -95,6 +101,10 @@ class AppShell(ctk.CTkFrame):
         )
         self.collection_controller = CollectionController(
             CollectionService(CollectionRepository(database)),
+            session,
+        )
+        self.report_controller = ReportController(
+            ReportService(ReportRepository(database), paths),
             session,
         )
         self.grid_columnconfigure(0, weight=1)
@@ -154,6 +164,13 @@ class AppShell(ctk.CTkFrame):
 
         if route_key == "collections":
             CollectionView(self.shell.content, self.collection_controller).pack(
+                fill="both",
+                expand=True,
+            )
+            return
+
+        if route_key == "reports":
+            ReportView(self.shell.content, self.report_controller).pack(
                 fill="both",
                 expand=True,
             )

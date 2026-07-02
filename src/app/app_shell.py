@@ -58,7 +58,7 @@ class ApplicationShell:
     def _build_app_view(self, master, _context):
         if self._session is None:
             raise RuntimeError("Cannot build app shell without an authenticated session")
-        return AppShell(master, self._session, self.context.database)
+        return AppShell(master, self._session, self.context.database, self.context.paths)
 
     def _handle_login_success(self, session: UserSession) -> None:
         self._session = session

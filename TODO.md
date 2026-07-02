@@ -2,10 +2,10 @@
 
 ## Current
 
-- Module 9 complete.
+- Module 10 complete.
 
 ## Next
 
-- Module 10: Reports and Export Foundation.
-- Build summary report services and export-friendly data queries.
-- Keep PDF/Excel formatting polish for the dedicated reporting/export iteration.
+- Module 11: Audit Log Foundation.
+- Build audit log repository/service, record key business actions, and add read-only audit viewer.
+- Keep advanced filtering/export of audit logs for the reporting iteration.

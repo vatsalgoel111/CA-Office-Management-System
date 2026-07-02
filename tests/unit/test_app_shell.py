@@ -68,12 +68,14 @@ class AppShellTest(unittest.TestCase):
             ClientView,
             CollectionView,
             DashboardView,
+            ReportView,
             StaffView,
             WorkView,
         )
 
         self.assertIsNotNone(BillingView)
         self.assertIsNotNone(DashboardView)
+        self.assertIsNotNone(ReportView)
         self.assertIsNotNone(ClientView)
         self.assertIsNotNone(CollectionView)
         self.assertIsNotNone(StaffView)

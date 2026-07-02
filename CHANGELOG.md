@@ -39,3 +39,5 @@ All notable project changes will be documented here.
 - Added Module 8 review documentation.
 - Added collection model, repository, service, controller, view, route wiring, and collection tests.
 - Added Module 9 review documentation.
+- Added report models, repository, service, controller, view, CSV export, and report tests.
+- Added Module 10 review documentation.
