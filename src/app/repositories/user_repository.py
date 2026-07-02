@@ -7,10 +7,10 @@ Last Modified: 2026-07-02
 Dependencies: typing, app.database.connection, app.models.user.
 """
 
-from typing import FrozenSet, Optional
+from typing import FrozenSet, List, Optional
 
 from app.database.connection import DatabaseConnectionManager
-from app.models.user import CreateUserRequest, User
+from app.models.user import CreateUserRequest, UpdateUserRequest, User
 
 
 class UserRepository:
@@ -53,6 +53,83 @@ class UserRepository:
             return None
         return self._map_user(row)
 
+    def get_by_id(self, user_id: int) -> Optional[User]:
+        """Return a user by ID."""
+
+        with self._connection_manager.connect() as connection:
+            row = connection.execute(
+                """
+                SELECT
+                    users.id,
+                    users.full_name,
+                    users.username,
+                    users.password_hash,
+                    users.role_id,
+                    roles.code AS role_code,
+                    roles.name AS role_name,
+                    users.mobile,
+                    users.email,
+                    users.is_active
+                FROM users
+                JOIN roles ON roles.id = users.role_id
+                WHERE users.id = ?;
+                """,
+                (user_id,),
+            ).fetchone()
+
+        if row is None:
+            return None
+        return self._map_user(row)
+
+    def list_users(
+        self,
+        search_text: str = "",
+        include_inactive: bool = True,
+    ) -> List[User]:
+        """List users for staff management."""
+
+        query = """
+            SELECT
+                users.id,
+                users.full_name,
+                users.username,
+                users.password_hash,
+                users.role_id,
+                roles.code AS role_code,
+                roles.name AS role_name,
+                users.mobile,
+                users.email,
+                users.is_active
+            FROM users
+            JOIN roles ON roles.id = users.role_id
+        """
+        params = []
+        clauses = []
+        cleaned_search = search_text.strip().lower()
+        if cleaned_search:
+            clauses.append(
+                """
+                (
+                    LOWER(users.full_name) LIKE ?
+                    OR LOWER(users.username) LIKE ?
+                    OR LOWER(roles.name) LIKE ?
+                    OR users.mobile LIKE ?
+                    OR LOWER(users.email) LIKE ?
+                )
+                """
+            )
+            search_pattern = f"%{cleaned_search}%"
+            params.extend([search_pattern] * 5)
+        if not include_inactive:
+            clauses.append("users.is_active = 1")
+        if clauses:
+            query += " WHERE " + " AND ".join(clauses)
+        query += " ORDER BY users.is_active DESC, users.full_name ASC;"
+
+        with self._connection_manager.connect() as connection:
+            rows = connection.execute(query, tuple(params)).fetchall()
+        return [self._map_user(row) for row in rows]
+
     def create_user(self, request: CreateUserRequest) -> int:
         """Create a user and return the new user ID."""
 
@@ -89,6 +166,50 @@ class UserRepository:
             )
             return int(cursor.lastrowid)
 
+    def update_user(self, user_id: int, request: UpdateUserRequest) -> None:
+        """Update user profile and role."""
+
+        with self._connection_manager.transaction() as connection:
+            role_row = connection.execute(
+                "SELECT id FROM roles WHERE code = ?;",
+                (request.role_code,),
+            ).fetchone()
+            if role_row is None:
+                raise ValueError(f"Unknown role code: {request.role_code}")
+
+            connection.execute(
+                """
+                UPDATE users
+                SET full_name = ?,
+                    role_id = ?,
+                    mobile = ?,
+                    email = ?,
+                    updated_at = CURRENT_TIMESTAMP
+                WHERE id = ?;
+                """,
+                (
+                    request.full_name.strip(),
+                    int(role_row["id"]),
+                    request.mobile,
+                    request.email,
+                    user_id,
+                ),
+            )
+
+    def set_active(self, user_id: int, is_active: bool) -> None:
+        """Activate or deactivate a user."""
+
+        with self._connection_manager.transaction() as connection:
+            connection.execute(
+                """
+                UPDATE users
+                SET is_active = ?,
+                    updated_at = CURRENT_TIMESTAMP
+                WHERE id = ?;
+                """,
+                (1 if is_active else 0, user_id),
+            )
+
     def get_permissions_for_user(self, user_id: int) -> FrozenSet[str]:
         """Return permission codes assigned to a user through their role."""
 
@@ -118,4 +239,3 @@ class UserRepository:
             email=row["email"],
             is_active=bool(row["is_active"]),
         )
-

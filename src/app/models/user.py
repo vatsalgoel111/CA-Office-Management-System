@@ -39,3 +39,12 @@ class CreateUserRequest:
     email: Optional[str] = None
     is_active: bool = True
 
+
+@dataclass(frozen=True)
+class UpdateUserRequest:
+    """Data needed to update a user profile."""
+
+    full_name: str
+    role_code: str
+    mobile: Optional[str] = None
+    email: Optional[str] = None

@@ -2,10 +2,10 @@
 
 ## Current
 
-- Module 6 complete.
+- Module 7 complete.
 
 ## Next
 
-- Module 7: Staff Management Foundation.
-- Build staff listing, create-user workflow, role assignment, activation/deactivation, and staff lookup support.
-- Improve Work assignment staff selection after the staff management layer is available.
+- Module 8: Billing Management Foundation.
+- Build bill creation, bill listing, status tracking, and billing permission checks.
+- Keep invoice PDF generation and advanced reports for later reporting/export modules.
