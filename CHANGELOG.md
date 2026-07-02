@@ -43,3 +43,5 @@ All notable project changes will be documented here.
 - Added Module 10 review documentation.
 - Added audit log models, repository, service, controller, viewer route, and audit tests.
 - Added Module 11 review documentation.
+- Added backup models, service, controller, backup view, route wiring, and backup tests.
+- Added Module 12 review documentation.

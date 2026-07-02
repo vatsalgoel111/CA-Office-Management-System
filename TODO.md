@@ -2,10 +2,10 @@
 
 ## Current
 
-- Module 11 complete.
+- Module 12 complete.
 
 ## Next
 
-- Module 12: Automatic Backup Foundation.
-- Build SQLite backup service, manual backup action, retention cleanup, and backup verification tests.
-- Keep scheduled background backups for the automation engine module.
+- Module 13: Reminder System Foundation.
+- Build overdue/upcoming work reminder query service and dashboard-ready reminder data.
+- Keep scheduled notification delivery for the automation engine module.

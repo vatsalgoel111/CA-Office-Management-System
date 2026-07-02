@@ -17,6 +17,7 @@ from app.ui.components import (
 )
 from app.ui.audit_view import AuditView
 from app.ui.app_shell import AppShell
+from app.ui.backup_view import BackupView
 from app.ui.billing_view import BillingView
 from app.ui.client_view import ClientView
 from app.ui.collection_view import CollectionView
@@ -34,6 +35,7 @@ __all__ = [
     "DataTable",
     "AuditView",
     "AppShell",
+    "BackupView",
     "BillingView",
     "ClientView",
     "CollectionView",

@@ -59,6 +59,10 @@ class AppShellTest(unittest.TestCase):
             PermissionCode.AUDIT_VIEW.value,
         )
         self.assertEqual(
+            items["backups"].required_permission,
+            PermissionCode.BACKUP_CREATE.value,
+        )
+        self.assertEqual(
             items["work"].required_permission,
             (
                 PermissionCode.WORK_VIEW_ALL.value,
@@ -69,6 +73,7 @@ class AppShellTest(unittest.TestCase):
     def test_app_shell_imports_dashboard_view(self) -> None:
         from app.ui import (  # noqa: WPS433
             AuditView,
+            BackupView,
             BillingView,
             ClientView,
             CollectionView,
@@ -79,6 +84,7 @@ class AppShellTest(unittest.TestCase):
         )
 
         self.assertIsNotNone(AuditView)
+        self.assertIsNotNone(BackupView)
         self.assertIsNotNone(BillingView)
         self.assertIsNotNone(DashboardView)
         self.assertIsNotNone(ReportView)

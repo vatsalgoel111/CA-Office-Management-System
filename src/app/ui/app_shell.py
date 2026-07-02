@@ -11,6 +11,7 @@ import customtkinter as ctk
 
 from app.constants import PermissionCode
 from app.controllers.audit_controller import AuditController
+from app.controllers.backup_controller import BackupController
 from app.controllers.billing_controller import BillingController
 from app.controllers.client_controller import ClientController
 from app.controllers.collection_controller import CollectionController
@@ -30,6 +31,7 @@ from app.repositories.report_repository import ReportRepository
 from app.repositories.user_repository import UserRepository
 from app.repositories.work_repository import WorkRepository
 from app.services.audit_service import AuditService
+from app.services.backup_service import BackupService
 from app.services.billing_service import BillingService
 from app.services.client_service import ClientService
 from app.services.collection_service import CollectionService
@@ -38,6 +40,7 @@ from app.services.report_service import ReportService
 from app.services.staff_service import StaffService
 from app.services.work_service import WorkService
 from app.ui.audit_view import AuditView
+from app.ui.backup_view import BackupView
 from app.ui.billing_view import BillingView
 from app.ui.client_view import ClientView
 from app.ui.collection_view import CollectionView
@@ -72,6 +75,7 @@ class AppShell(ctk.CTkFrame):
         ),
         NavigationItem("reports", "Reports", PermissionCode.REPORTS_VIEW.value),
         NavigationItem("audit", "Audit", PermissionCode.AUDIT_VIEW.value),
+        NavigationItem("backups", "Backups", PermissionCode.BACKUP_CREATE.value),
     )
 
     def __init__(
@@ -114,6 +118,10 @@ class AppShell(ctk.CTkFrame):
         )
         self.audit_controller = AuditController(
             AuditService(AuditRepository(database)),
+            session,
+        )
+        self.backup_controller = BackupController(
+            BackupService(paths),
             session,
         )
         self.grid_columnconfigure(0, weight=1)
@@ -187,6 +195,13 @@ class AppShell(ctk.CTkFrame):
 
         if route_key == "audit":
             AuditView(self.shell.content, self.audit_controller).pack(
+                fill="both",
+                expand=True,
+            )
+            return
+
+        if route_key == "backups":
+            BackupView(self.shell.content, self.backup_controller).pack(
                 fill="both",
                 expand=True,
             )
