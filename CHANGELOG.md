@@ -35,3 +35,5 @@ All notable project changes will be documented here.
 - Added Module 6 review documentation.
 - Added staff management model, service, controller, view, repository extensions, and staff tests.
 - Added Module 7 review documentation.
+- Added billing model, repository, service, controller, view, route wiring, and billing tests.
+- Added Module 8 review documentation.

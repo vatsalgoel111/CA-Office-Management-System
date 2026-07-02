@@ -2,10 +2,10 @@
 
 ## Current
 
-- Module 7 complete.
+- Module 8 complete.
 
 ## Next
 
-- Module 8: Billing Management Foundation.
-- Build bill creation, bill listing, status tracking, and billing permission checks.
-- Keep invoice PDF generation and advanced reports for later reporting/export modules.
+- Module 9: Collection Tracking Foundation.
+- Build collection entry, bill payment status updates, collection listing, and validation.
+- Keep advanced ageing reports for the reporting module.

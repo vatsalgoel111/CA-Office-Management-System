@@ -16,6 +16,7 @@ from app.ui.components import (
     TopBar,
 )
 from app.ui.app_shell import AppShell
+from app.ui.billing_view import BillingView
 from app.ui.client_view import ClientView
 from app.ui.dashboard_view import DashboardView
 from app.ui.login_view import LoginView
@@ -29,6 +30,7 @@ __all__ = [
     "ConfirmationDialog",
     "DataTable",
     "AppShell",
+    "BillingView",
     "ClientView",
     "DashboardView",
     "FormField",
