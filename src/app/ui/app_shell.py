@@ -17,6 +17,7 @@ from app.controllers.client_controller import ClientController
 from app.controllers.collection_controller import CollectionController
 from app.controllers.dashboard_controller import DashboardController
 from app.controllers.report_controller import ReportController
+from app.controllers.reminder_controller import ReminderController
 from app.controllers.staff_controller import StaffController
 from app.controllers.work_controller import WorkController
 from app.database.connection import DatabaseConnectionManager
@@ -28,6 +29,7 @@ from app.repositories.audit_repository import AuditRepository
 from app.repositories.collection_repository import CollectionRepository
 from app.repositories.dashboard_repository import DashboardRepository
 from app.repositories.report_repository import ReportRepository
+from app.repositories.reminder_repository import ReminderRepository
 from app.repositories.user_repository import UserRepository
 from app.repositories.work_repository import WorkRepository
 from app.services.audit_service import AuditService
@@ -37,6 +39,7 @@ from app.services.client_service import ClientService
 from app.services.collection_service import CollectionService
 from app.services.dashboard_service import DashboardService
 from app.services.report_service import ReportService
+from app.services.reminder_service import ReminderService
 from app.services.staff_service import StaffService
 from app.services.work_service import WorkService
 from app.ui.audit_view import AuditView
@@ -47,6 +50,7 @@ from app.ui.collection_view import CollectionView
 from app.ui.dashboard_view import DashboardView
 from app.ui.navigation import NavigationItem, NavigationShell
 from app.ui.report_view import ReportView
+from app.ui.reminder_view import ReminderView
 from app.ui.staff_view import StaffView
 from app.ui.theme import theme_manager
 from app.ui.work_view import WorkView
@@ -62,6 +66,14 @@ class AppShell(ctk.CTkFrame):
         NavigationItem(
             "work",
             "Work",
+            (
+                PermissionCode.WORK_VIEW_ALL.value,
+                PermissionCode.WORK_VIEW_ASSIGNED.value,
+            ),
+        ),
+        NavigationItem(
+            "reminders",
+            "Reminders",
             (
                 PermissionCode.WORK_VIEW_ALL.value,
                 PermissionCode.WORK_VIEW_ASSIGNED.value,
@@ -102,6 +114,10 @@ class AppShell(ctk.CTkFrame):
         )
         self.work_controller = WorkController(
             WorkService(WorkRepository(database)),
+            session,
+        )
+        self.reminder_controller = ReminderController(
+            ReminderService(ReminderRepository(database)),
             session,
         )
         self.billing_controller = BillingController(
@@ -167,6 +183,13 @@ class AppShell(ctk.CTkFrame):
 
         if route_key == "work":
             WorkView(self.shell.content, self.work_controller).pack(
+                fill="both",
+                expand=True,
+            )
+            return
+
+        if route_key == "reminders":
+            ReminderView(self.shell.content, self.reminder_controller).pack(
                 fill="both",
                 expand=True,
             )

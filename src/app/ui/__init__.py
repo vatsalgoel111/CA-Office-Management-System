@@ -25,6 +25,7 @@ from app.ui.dashboard_view import DashboardView
 from app.ui.login_view import LoginView
 from app.ui.navigation import NavigationItem, NavigationShell
 from app.ui.report_view import ReportView
+from app.ui.reminder_view import ReminderView
 from app.ui.staff_view import StaffView
 from app.ui.theme import ThemeManager, theme_manager
 from app.ui.window_manager import WindowManager
@@ -50,6 +51,7 @@ __all__ = [
     "NotificationToast",
     "PrimaryButton",
     "ReportView",
+    "ReminderView",
     "SearchBox",
     "SecondaryButton",
     "Sidebar",

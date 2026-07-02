@@ -45,3 +45,5 @@ All notable project changes will be documented here.
 - Added Module 11 review documentation.
 - Added backup models, service, controller, backup view, route wiring, and backup tests.
 - Added Module 12 review documentation.
+- Added reminder model, repository, service, controller, view, route wiring, and reminder tests.
+- Added Module 13 review documentation.
