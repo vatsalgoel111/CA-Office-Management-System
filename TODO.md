@@ -2,10 +2,10 @@
 
 ## Current
 
-- Module 13 complete.
+- Module 14 complete.
 
 ## Next
 
-- Module 14: Notification and WhatsApp Foundation.
-- Build notification queue service and provider-neutral WhatsApp message preparation.
-- Keep actual WhatsApp sending behind a later provider configuration step.
+- Module 15: Settings Foundation.
+- Build settings repository/service/view for editable application settings.
+- Keep advanced settings sections for future hardening.

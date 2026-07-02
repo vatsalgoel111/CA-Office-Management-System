@@ -24,6 +24,7 @@ from app.ui.collection_view import CollectionView
 from app.ui.dashboard_view import DashboardView
 from app.ui.login_view import LoginView
 from app.ui.navigation import NavigationItem, NavigationShell
+from app.ui.notification_view import NotificationView
 from app.ui.report_view import ReportView
 from app.ui.reminder_view import ReminderView
 from app.ui.staff_view import StaffView
@@ -49,6 +50,7 @@ __all__ = [
     "NavigationItem",
     "NavigationShell",
     "NotificationToast",
+    "NotificationView",
     "PrimaryButton",
     "ReportView",
     "ReminderView",

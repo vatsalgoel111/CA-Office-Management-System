@@ -47,3 +47,5 @@ All notable project changes will be documented here.
 - Added Module 12 review documentation.
 - Added reminder model, repository, service, controller, view, route wiring, and reminder tests.
 - Added Module 13 review documentation.
+- Added notification queue model, repository, service, controller, view, route wiring, and notification tests.
+- Added Module 14 review documentation.

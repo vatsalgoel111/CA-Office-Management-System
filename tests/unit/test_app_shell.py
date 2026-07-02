@@ -63,6 +63,10 @@ class AppShellTest(unittest.TestCase):
             PermissionCode.BACKUP_CREATE.value,
         )
         self.assertEqual(
+            items["notifications"].required_permission,
+            PermissionCode.SETTINGS_MANAGE.value,
+        )
+        self.assertEqual(
             items["work"].required_permission,
             (
                 PermissionCode.WORK_VIEW_ALL.value,
@@ -85,6 +89,7 @@ class AppShellTest(unittest.TestCase):
             ClientView,
             CollectionView,
             DashboardView,
+            NotificationView,
             ReportView,
             ReminderView,
             StaffView,
@@ -99,6 +104,7 @@ class AppShellTest(unittest.TestCase):
         self.assertIsNotNone(ReminderView)
         self.assertIsNotNone(ClientView)
         self.assertIsNotNone(CollectionView)
+        self.assertIsNotNone(NotificationView)
         self.assertIsNotNone(StaffView)
         self.assertIsNotNone(WorkView)
 

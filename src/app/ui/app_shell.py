@@ -16,6 +16,7 @@ from app.controllers.billing_controller import BillingController
 from app.controllers.client_controller import ClientController
 from app.controllers.collection_controller import CollectionController
 from app.controllers.dashboard_controller import DashboardController
+from app.controllers.notification_controller import NotificationController
 from app.controllers.report_controller import ReportController
 from app.controllers.reminder_controller import ReminderController
 from app.controllers.staff_controller import StaffController
@@ -28,6 +29,7 @@ from app.repositories.billing_repository import BillingRepository
 from app.repositories.audit_repository import AuditRepository
 from app.repositories.collection_repository import CollectionRepository
 from app.repositories.dashboard_repository import DashboardRepository
+from app.repositories.notification_repository import NotificationRepository
 from app.repositories.report_repository import ReportRepository
 from app.repositories.reminder_repository import ReminderRepository
 from app.repositories.user_repository import UserRepository
@@ -38,6 +40,7 @@ from app.services.billing_service import BillingService
 from app.services.client_service import ClientService
 from app.services.collection_service import CollectionService
 from app.services.dashboard_service import DashboardService
+from app.services.notification_service import NotificationService
 from app.services.report_service import ReportService
 from app.services.reminder_service import ReminderService
 from app.services.staff_service import StaffService
@@ -49,6 +52,7 @@ from app.ui.client_view import ClientView
 from app.ui.collection_view import CollectionView
 from app.ui.dashboard_view import DashboardView
 from app.ui.navigation import NavigationItem, NavigationShell
+from app.ui.notification_view import NotificationView
 from app.ui.report_view import ReportView
 from app.ui.reminder_view import ReminderView
 from app.ui.staff_view import StaffView
@@ -88,6 +92,7 @@ class AppShell(ctk.CTkFrame):
         NavigationItem("reports", "Reports", PermissionCode.REPORTS_VIEW.value),
         NavigationItem("audit", "Audit", PermissionCode.AUDIT_VIEW.value),
         NavigationItem("backups", "Backups", PermissionCode.BACKUP_CREATE.value),
+        NavigationItem("notifications", "Notifications", PermissionCode.SETTINGS_MANAGE.value),
     )
 
     def __init__(
@@ -138,6 +143,10 @@ class AppShell(ctk.CTkFrame):
         )
         self.backup_controller = BackupController(
             BackupService(paths),
+            session,
+        )
+        self.notification_controller = NotificationController(
+            NotificationService(NotificationRepository(database)),
             session,
         )
         self.grid_columnconfigure(0, weight=1)
@@ -225,6 +234,13 @@ class AppShell(ctk.CTkFrame):
 
         if route_key == "backups":
             BackupView(self.shell.content, self.backup_controller).pack(
+                fill="both",
+                expand=True,
+            )
+            return
+
+        if route_key == "notifications":
+            NotificationView(self.shell.content, self.notification_controller).pack(
                 fill="both",
                 expand=True,
             )
