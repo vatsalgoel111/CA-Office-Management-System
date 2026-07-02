@@ -4,7 +4,7 @@ Module: app.ui.work_view
 Author: CA Office CMS Development Team
 Created Date: 2026-07-02
 Last Modified: 2026-07-02
-Dependencies: typing, customtkinter, app.controllers.work_controller, app.models.work, app.ui.
+Dependencies: typing, customtkinter, app.controllers, app.models.work, app.ui.
 """
 
 from typing import List
@@ -12,8 +12,16 @@ from typing import List
 import customtkinter as ctk
 
 from app.controllers.work_controller import WorkController
+from app.controllers.lookup_controller import LookupController
 from app.models.work import WorkAssignmentInput, WorkItem
-from app.ui.components import DataTable, FormField, PrimaryButton, SecondaryButton
+from app.ui.components import (
+    DataTable,
+    DatePickerField,
+    FormField,
+    PrimaryButton,
+    SearchableDropdown,
+    SecondaryButton,
+)
 from app.ui.theme import theme_manager
 
 
@@ -22,9 +30,16 @@ class WorkView(ctk.CTkFrame):
 
     COLUMNS = ("Title", "Client", "Assigned To", "Type", "Priority", "Status", "Due")
 
-    def __init__(self, master, controller: WorkController, **kwargs) -> None:
+    def __init__(
+        self,
+        master,
+        controller: WorkController,
+        lookup_controller: LookupController,
+        **kwargs,
+    ) -> None:
         super().__init__(master, fg_color=theme_manager.color("bg"), **kwargs)
         self._controller = controller
+        self._lookup_controller = lookup_controller
         self._work_items: List[WorkItem] = []
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(4, weight=1)
@@ -41,7 +56,7 @@ class WorkView(ctk.CTkFrame):
 
         ctk.CTkLabel(
             self,
-            text="Assign work and update visible task status. Staff selectors will improve in the staff module.",
+            text="Assign work and update visible task status.",
             text_color=theme_manager.color("text_muted"),
             font=theme_manager.font(theme_manager.tokens.fonts.body),
         ).grid(row=1, column=0, sticky="w", padx=24, pady=(0, 16))
@@ -57,15 +72,15 @@ class WorkView(ctk.CTkFrame):
         for column in range(5):
             form.grid_columnconfigure(column, weight=1)
 
-        self.client_id = FormField(form, "Client ID", required=True)
-        self.client_id.grid(row=0, column=0, sticky="ew", padx=12, pady=12)
-        self.assigned_to_user_id = FormField(form, "Assigned User ID", required=True)
-        self.assigned_to_user_id.grid(row=0, column=1, sticky="ew", padx=12, pady=12)
+        self.client = SearchableDropdown(form, "Client", required=True)
+        self.client.grid(row=0, column=0, sticky="ew", padx=12, pady=12)
+        self.assigned_to_user = SearchableDropdown(form, "Assigned To", required=True)
+        self.assigned_to_user.grid(row=0, column=1, sticky="ew", padx=12, pady=12)
         self.work_type = FormField(form, "Work Type", required=True)
         self.work_type.grid(row=0, column=2, sticky="ew", padx=12, pady=12)
         self.title = FormField(form, "Title", required=True)
         self.title.grid(row=0, column=3, sticky="ew", padx=12, pady=12)
-        self.due_date = FormField(form, "Due Date", placeholder="YYYY-MM-DD")
+        self.due_date = DatePickerField(form, "Due Date")
         self.due_date.grid(row=0, column=4, sticky="ew", padx=12, pady=12)
 
         self.message_label = ctk.CTkLabel(
@@ -84,7 +99,7 @@ class WorkView(ctk.CTkFrame):
             padx=(0, 8),
         )
 
-        self.table = DataTable(self, self.COLUMNS)
+        self.table = DataTable(self, self.COLUMNS, empty_message="No work items found.")
         self.table.grid(row=4, column=0, sticky="nsew", padx=24, pady=(0, 12))
 
         bottom_actions = ctk.CTkFrame(self, fg_color="transparent")
@@ -96,6 +111,8 @@ class WorkView(ctk.CTkFrame):
         ).pack(side="right")
 
     def _refresh(self) -> None:
+        self.client.set_choices(self._lookup_controller.active_clients())
+        self.assigned_to_user.set_choices(self._lookup_controller.active_users())
         self._work_items = self._controller.list_work()
         self.table.set_rows(
             (
@@ -112,11 +129,10 @@ class WorkView(ctk.CTkFrame):
 
     def _assign_work(self) -> None:
         self.message_label.configure(text="")
-        try:
-            client_id = int(self.client_id.get())
-            assigned_user_id = int(self.assigned_to_user_id.get())
-        except ValueError:
-            self.message_label.configure(text="Client ID and Assigned User ID must be numbers")
+        client_id = self.client.get_selected_id()
+        assigned_user_id = self.assigned_to_user.get_selected_id()
+        if client_id is None or assigned_user_id is None:
+            self.message_label.configure(text="Select a client and assigned staff member.")
             return
 
         error = self._controller.assign(
@@ -150,13 +166,15 @@ class WorkView(ctk.CTkFrame):
 
     def _clear_form(self) -> None:
         for field in (
-            self.client_id,
-            self.assigned_to_user_id,
+            self.client,
+            self.assigned_to_user,
             self.work_type,
             self.title,
             self.due_date,
         ):
-            field.input.delete(0, "end")
+            if hasattr(field, "input"):
+                field.input.delete(0, "end")
+            else:
+                field.clear()
             field.clear_error()
         self.message_label.configure(text="")
-

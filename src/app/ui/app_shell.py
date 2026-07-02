@@ -16,6 +16,7 @@ from app.controllers.billing_controller import BillingController
 from app.controllers.client_controller import ClientController
 from app.controllers.collection_controller import CollectionController
 from app.controllers.dashboard_controller import DashboardController
+from app.controllers.lookup_controller import LookupController
 from app.controllers.notification_controller import NotificationController
 from app.controllers.report_controller import ReportController
 from app.controllers.reminder_controller import ReminderController
@@ -30,6 +31,7 @@ from app.repositories.billing_repository import BillingRepository
 from app.repositories.audit_repository import AuditRepository
 from app.repositories.collection_repository import CollectionRepository
 from app.repositories.dashboard_repository import DashboardRepository
+from app.repositories.lookup_repository import LookupRepository
 from app.repositories.notification_repository import NotificationRepository
 from app.repositories.report_repository import ReportRepository
 from app.repositories.reminder_repository import ReminderRepository
@@ -126,6 +128,7 @@ class AppShell(ctk.CTkFrame):
             WorkService(WorkRepository(database)),
             session,
         )
+        self.lookup_controller = LookupController(LookupRepository(database))
         self.reminder_controller = ReminderController(
             ReminderService(ReminderRepository(database)),
             session,
@@ -175,6 +178,7 @@ class AppShell(ctk.CTkFrame):
     def show_route(self, route_key: str) -> None:
         """Show a route inside the authenticated shell."""
 
+        self.shell.set_active(route_key)
         for child in self.shell.content.winfo_children():
             child.destroy()
 
@@ -200,7 +204,7 @@ class AppShell(ctk.CTkFrame):
             return
 
         if route_key == "work":
-            WorkView(self.shell.content, self.work_controller).pack(
+            WorkView(self.shell.content, self.work_controller, self.lookup_controller).pack(
                 fill="both",
                 expand=True,
             )
@@ -214,14 +218,22 @@ class AppShell(ctk.CTkFrame):
             return
 
         if route_key == "billing":
-            BillingView(self.shell.content, self.billing_controller).pack(
+            BillingView(
+                self.shell.content,
+                self.billing_controller,
+                self.lookup_controller,
+            ).pack(
                 fill="both",
                 expand=True,
             )
             return
 
         if route_key == "collections":
-            CollectionView(self.shell.content, self.collection_controller).pack(
+            CollectionView(
+                self.shell.content,
+                self.collection_controller,
+                self.lookup_controller,
+            ).pack(
                 fill="both",
                 expand=True,
             )
@@ -249,7 +261,11 @@ class AppShell(ctk.CTkFrame):
             return
 
         if route_key == "notifications":
-            NotificationView(self.shell.content, self.notification_controller).pack(
+            NotificationView(
+                self.shell.content,
+                self.notification_controller,
+                self.lookup_controller,
+            ).pack(
                 fill="both",
                 expand=True,
             )

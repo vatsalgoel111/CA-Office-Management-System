@@ -59,10 +59,16 @@ class NavigationShell(ctk.CTkFrame):
             ):
                 continue
             self.sidebar.add_item(
+                item.key,
                 item.label,
                 command=lambda key=item.key: on_navigate(key),
                 active=item.key == active_key,
             )
+
+    def set_active(self, active_key: str) -> None:
+        """Set active navigation item."""
+
+        self.sidebar.set_active(active_key)
 
     def _can_show_item(
         self,

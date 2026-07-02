@@ -4,16 +4,23 @@ Module: app.ui.notification_view
 Author: CA Office CMS Development Team
 Created Date: 2026-07-02
 Last Modified: 2026-07-02
-Dependencies: typing, customtkinter, app.controllers.notification_controller, app.models, app.ui.
+Dependencies: typing, customtkinter, app.controllers, app.models, app.ui.
 """
 
-from typing import List, Optional
+from typing import List
 
 import customtkinter as ctk
 
+from app.controllers.lookup_controller import LookupController
 from app.controllers.notification_controller import NotificationController
 from app.models.notification import NotificationInput, NotificationRecord
-from app.ui.components import DataTable, FormField, PrimaryButton, SecondaryButton
+from app.ui.components import (
+    DataTable,
+    FormField,
+    PrimaryButton,
+    SearchableDropdown,
+    SecondaryButton,
+)
 from app.ui.theme import theme_manager
 
 
@@ -22,9 +29,16 @@ class NotificationView(ctk.CTkFrame):
 
     COLUMNS = ("Created", "Recipient", "Type", "Provider", "Status", "Message")
 
-    def __init__(self, master, controller: NotificationController, **kwargs) -> None:
+    def __init__(
+        self,
+        master,
+        controller: NotificationController,
+        lookup_controller: LookupController,
+        **kwargs,
+    ) -> None:
         super().__init__(master, fg_color=theme_manager.color("bg"), **kwargs)
         self._controller = controller
+        self._lookup_controller = lookup_controller
         self._notifications: List[NotificationRecord] = []
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(4, weight=1)
@@ -56,14 +70,14 @@ class NotificationView(ctk.CTkFrame):
         for column in range(5):
             form.grid_columnconfigure(column, weight=1)
 
-        self.recipient_user_id = FormField(form, "Recipient User ID", required=True)
-        self.recipient_user_id.grid(row=0, column=0, sticky="ew", padx=12, pady=12)
+        self.recipient_user = SearchableDropdown(form, "Recipient", required=True)
+        self.recipient_user.grid(row=0, column=0, sticky="ew", padx=12, pady=12)
         self.notification_type = FormField(form, "Type", placeholder="manual")
         self.notification_type.grid(row=0, column=1, sticky="ew", padx=12, pady=12)
         self.provider = FormField(form, "Provider", placeholder="whatsapp")
         self.provider.grid(row=0, column=2, sticky="ew", padx=12, pady=12)
-        self.related_work_item_id = FormField(form, "Work ID")
-        self.related_work_item_id.grid(row=0, column=3, sticky="ew", padx=12, pady=12)
+        self.related_work_item = SearchableDropdown(form, "Related Work")
+        self.related_work_item.grid(row=0, column=3, sticky="ew", padx=12, pady=12)
         self.message = FormField(form, "Message", required=True)
         self.message.grid(row=0, column=4, sticky="ew", padx=12, pady=12)
 
@@ -83,10 +97,12 @@ class NotificationView(ctk.CTkFrame):
             padx=(0, 8),
         )
 
-        self.table = DataTable(self, self.COLUMNS)
+        self.table = DataTable(self, self.COLUMNS, empty_message="No notifications queued.")
         self.table.grid(row=4, column=0, sticky="nsew", padx=24, pady=(0, 24))
 
     def _refresh(self) -> None:
+        self.recipient_user.set_choices(self._lookup_controller.active_users())
+        self.related_work_item.set_choices(self._lookup_controller.work_items())
         self._notifications = self._controller.list_notifications()
         self.table.set_rows(
             (
@@ -102,11 +118,10 @@ class NotificationView(ctk.CTkFrame):
 
     def _queue_notification(self) -> None:
         self.message_label.configure(text="")
-        try:
-            recipient_id = int(self.recipient_user_id.get())
-            work_item_id = self._optional_int(self.related_work_item_id.get())
-        except ValueError:
-            self.message_label.configure(text="Recipient User ID and Work ID must be numbers")
+        recipient_id = self.recipient_user.get_selected_id()
+        work_item_id = self.related_work_item.get_selected_id()
+        if recipient_id is None:
+            self.message_label.configure(text="Select a recipient before queueing.")
             return
 
         error = self._controller.queue(
@@ -122,8 +137,3 @@ class NotificationView(ctk.CTkFrame):
             self.message_label.configure(text=error)
             return
         self._refresh()
-
-    def _optional_int(self, value: str) -> Optional[int]:
-        if not value:
-            return None
-        return int(value)

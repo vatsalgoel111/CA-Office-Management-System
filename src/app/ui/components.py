@@ -4,13 +4,16 @@ Module: app.ui.components
 Author: CA Office CMS Development Team
 Created Date: 2026-07-02
 Last Modified: 2026-07-02
-Dependencies: typing, customtkinter, app.ui.theme.
+Dependencies: datetime, typing, customtkinter, tkcalendar, app.models.lookup, app.ui.theme.
 """
 
+from datetime import date
 from typing import Callable, Iterable, List, Optional, Sequence
 
 import customtkinter as ctk
+from tkcalendar import DateEntry
 
+from app.models.lookup import LookupChoice
 from app.ui.theme import theme_manager
 
 
@@ -106,6 +109,176 @@ class SearchBox(ctk.CTkFrame):
 
         if self._on_search:
             self._on_search(self.get())
+
+
+class SearchableDropdown(ctk.CTkFrame):
+    """Searchable ID-backed dropdown that displays business labels."""
+
+    def __init__(
+        self,
+        master,
+        label: str,
+        required: bool = False,
+        placeholder: str = "Search",
+        **kwargs,
+    ) -> None:
+        super().__init__(master, fg_color="transparent", **kwargs)
+        self._choices: List[LookupChoice] = []
+        self._filtered: List[LookupChoice] = []
+        self._selected: Optional[LookupChoice] = None
+
+        display_label = f"{label} *" if required else label
+        ctk.CTkLabel(
+            self,
+            text=display_label,
+            anchor="w",
+            text_color=theme_manager.color("text"),
+            font=theme_manager.font(theme_manager.tokens.fonts.body, "bold"),
+        ).pack(fill="x")
+        self.search_input = ctk.CTkEntry(
+            self,
+            placeholder_text=placeholder,
+            border_color=theme_manager.color("border"),
+            fg_color=theme_manager.color("surface"),
+            text_color=theme_manager.color("text"),
+        )
+        self.search_input.pack(fill="x", pady=(theme_manager.tokens.spacing.xs, 4))
+        self.option = ctk.CTkOptionMenu(
+            self,
+            values=["No options"],
+            command=self._select_display,
+            fg_color=theme_manager.color("surface_alt"),
+            button_color=theme_manager.color("primary"),
+            button_hover_color=theme_manager.color("primary_hover"),
+            text_color=theme_manager.color("text"),
+            dropdown_fg_color=theme_manager.color("surface"),
+            dropdown_text_color=theme_manager.color("text"),
+        )
+        self.option.pack(fill="x")
+        self.error_label = ctk.CTkLabel(
+            self,
+            text="",
+            anchor="w",
+            text_color=theme_manager.color("error"),
+            font=theme_manager.font(theme_manager.tokens.fonts.small),
+        )
+        self.error_label.pack(fill="x")
+        self.search_input.bind("<KeyRelease>", lambda _event: self._filter())
+
+    def set_choices(self, choices: Sequence[LookupChoice]) -> None:
+        """Replace dropdown choices."""
+
+        current_id = self.get_selected_id()
+        self._choices = list(choices)
+        self._filtered = list(self._choices)
+        self._selected = None
+        if current_id is not None:
+            self._selected = next(
+                (choice for choice in self._choices if choice.id == current_id),
+                None,
+            )
+        self._sync_values()
+
+    def get_selected_id(self) -> Optional[int]:
+        """Return selected choice ID."""
+
+        return self._selected.id if self._selected else None
+
+    def clear(self) -> None:
+        """Clear selection and search text."""
+
+        self._selected = None
+        self.search_input.delete(0, "end")
+        self._filtered = list(self._choices)
+        self._sync_values()
+        self.clear_error()
+
+    def set_error(self, message: str) -> None:
+        """Show validation error text."""
+
+        self.error_label.configure(text=message)
+
+    def clear_error(self) -> None:
+        """Clear validation error text."""
+
+        self.error_label.configure(text="")
+
+    def _filter(self) -> None:
+        search = self.search_input.get().strip().lower()
+        self._filtered = [
+            choice for choice in self._choices if search in choice.display.lower()
+        ]
+        self._selected = None
+        self._sync_values()
+
+    def _sync_values(self) -> None:
+        values = [choice.display for choice in self._filtered] or ["No options"]
+        self.option.configure(values=values)
+        if self._selected is not None:
+            self.option.set(self._selected.display)
+            return
+        self.option.set(values[0])
+        if self._filtered:
+            self._selected = self._filtered[0]
+
+    def _select_display(self, display: str) -> None:
+        self._selected = next(
+            (choice for choice in self._filtered if choice.display == display),
+            None,
+        )
+
+
+class DatePickerField(ctk.CTkFrame):
+    """Calendar date picker using tkcalendar."""
+
+    def __init__(self, master, label: str, required: bool = False, **kwargs) -> None:
+        super().__init__(master, fg_color="transparent", **kwargs)
+        display_label = f"{label} *" if required else label
+        ctk.CTkLabel(
+            self,
+            text=display_label,
+            anchor="w",
+            text_color=theme_manager.color("text"),
+            font=theme_manager.font(theme_manager.tokens.fonts.body, "bold"),
+        ).pack(fill="x")
+        self.input = DateEntry(
+            self,
+            date_pattern="yyyy-mm-dd",
+            width=14,
+            background=theme_manager.color("primary"),
+            foreground="white",
+            borderwidth=1,
+        )
+        self.input.pack(fill="x", pady=(theme_manager.tokens.spacing.xs, 0))
+        self.error_label = ctk.CTkLabel(
+            self,
+            text="",
+            anchor="w",
+            text_color=theme_manager.color("error"),
+            font=theme_manager.font(theme_manager.tokens.fonts.small),
+        )
+        self.error_label.pack(fill="x")
+
+    def get(self) -> str:
+        """Return selected date as ISO text."""
+
+        return self.input.get_date().isoformat()
+
+    def clear(self) -> None:
+        """Reset date to today."""
+
+        self.input.set_date(date.today())
+        self.clear_error()
+
+    def set_error(self, message: str) -> None:
+        """Show validation error text."""
+
+        self.error_label.configure(text=message)
+
+    def clear_error(self) -> None:
+        """Clear validation error text."""
+
+        self.error_label.configure(text="")
 
 
 class StatusBadge(ctk.CTkLabel):
@@ -236,11 +409,13 @@ class DataTable(ctk.CTkScrollableFrame):
         master,
         columns: Sequence[str],
         on_sort: Optional[Callable[[str], None]] = None,
+        empty_message: str = "No records found.",
         **kwargs,
     ) -> None:
         super().__init__(master, fg_color=theme_manager.color("surface"), **kwargs)
         self.columns = list(columns)
         self.on_sort = on_sort
+        self.empty_message = empty_message
         self.rows: List[Sequence[str]] = []
         self._render_header()
 
@@ -268,6 +443,25 @@ class DataTable(ctk.CTkScrollableFrame):
                 child.destroy()
 
         self.rows = list(rows)
+        if not self.rows:
+            ctk.CTkLabel(
+                self,
+                text=self.empty_message,
+                anchor="center",
+                fg_color=theme_manager.color("surface"),
+                text_color=theme_manager.color("text_muted"),
+                font=theme_manager.font(theme_manager.tokens.fonts.body),
+                padx=theme_manager.tokens.spacing.lg,
+                pady=theme_manager.tokens.spacing.lg,
+            ).grid(
+                row=1,
+                column=0,
+                columnspan=max(len(self.columns), 1),
+                sticky="ew",
+                padx=1,
+                pady=1,
+            )
+            return
         for row_index, row in enumerate(self.rows, start=1):
             row_color = "surface" if row_index % 2 else "surface_alt"
             for column_index, value in enumerate(row):
@@ -307,14 +501,51 @@ class Sidebar(ctk.CTkFrame):
         ).pack(fill="x", padx=theme_manager.tokens.spacing.lg, pady=theme_manager.tokens.spacing.lg)
         self.items_frame = ctk.CTkFrame(self, fg_color="transparent")
         self.items_frame.pack(fill="both", expand=True)
+        self._buttons = {}
 
-    def add_item(self, label: str, command: Command = None, active: bool = False) -> None:
+    def add_item(
+        self,
+        key: str,
+        label: str,
+        command: Command = None,
+        active: bool = False,
+    ) -> None:
         """Add a navigation item."""
 
-        button_class = PrimaryButton if active else IconButton
-        button = button_class(self.items_frame, text=label, command=command)
+        button = ctk.CTkButton(
+            self.items_frame,
+            text=label,
+            command=command,
+            fg_color=theme_manager.color("primary") if active else "transparent",
+            hover_color=theme_manager.color("primary_hover")
+            if active
+            else theme_manager.color("surface"),
+            text_color=("#FFFFFF", "#FFFFFF") if active else theme_manager.color("text"),
+            corner_radius=theme_manager.tokens.radius.md,
+            font=theme_manager.font(theme_manager.tokens.fonts.body, "bold" if active else "normal"),
+        )
         button.configure(anchor="w", width=180)
         button.pack(fill="x", padx=theme_manager.tokens.spacing.md, pady=theme_manager.tokens.spacing.xs)
+        self._buttons[key] = button
+
+    def set_active(self, active_key: str) -> None:
+        """Update active sidebar button."""
+
+        for key, button in self._buttons.items():
+            is_active = key == active_key
+            button.configure(
+                fg_color=theme_manager.color("primary") if is_active else "transparent",
+                hover_color=theme_manager.color("primary_hover")
+                if is_active
+                else theme_manager.color("surface"),
+                text_color=("#FFFFFF", "#FFFFFF")
+                if is_active
+                else theme_manager.color("text"),
+                font=theme_manager.font(
+                    theme_manager.tokens.fonts.body,
+                    "bold" if is_active else "normal",
+                ),
+            )
 
 
 class TopBar(ctk.CTkFrame):
@@ -403,4 +634,3 @@ class NotificationToast(ctk.CTkFrame):
             text_color=("#FFFFFF", "#101418"),
             font=theme_manager.font(theme_manager.tokens.fonts.body, "bold"),
         ).pack(padx=theme_manager.tokens.spacing.lg, pady=theme_manager.tokens.spacing.md)
-

@@ -4,7 +4,7 @@ Module: app.ui.collection_view
 Author: CA Office CMS Development Team
 Created Date: 2026-07-02
 Last Modified: 2026-07-02
-Dependencies: typing, customtkinter, app.controllers.collection_controller, app.models, app.ui.
+Dependencies: typing, customtkinter, app.controllers, app.models, app.ui.
 """
 
 from typing import List
@@ -12,8 +12,17 @@ from typing import List
 import customtkinter as ctk
 
 from app.controllers.collection_controller import CollectionController
+from app.controllers.lookup_controller import LookupController
 from app.models.collection import CollectionInput, CollectionRecord
-from app.ui.components import DataTable, FormField, PrimaryButton, SearchBox, SecondaryButton
+from app.ui.components import (
+    DataTable,
+    DatePickerField,
+    FormField,
+    PrimaryButton,
+    SearchableDropdown,
+    SearchBox,
+    SecondaryButton,
+)
 from app.ui.theme import theme_manager
 
 
@@ -22,9 +31,16 @@ class CollectionView(ctk.CTkFrame):
 
     COLUMNS = ("Bill No", "Client", "Date", "Amount", "Mode", "Notes")
 
-    def __init__(self, master, controller: CollectionController, **kwargs) -> None:
+    def __init__(
+        self,
+        master,
+        controller: CollectionController,
+        lookup_controller: LookupController,
+        **kwargs,
+    ) -> None:
         super().__init__(master, fg_color=theme_manager.color("bg"), **kwargs)
         self._controller = controller
+        self._lookup_controller = lookup_controller
         self._collections: List[CollectionRecord] = []
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(4, weight=1)
@@ -60,16 +76,11 @@ class CollectionView(ctk.CTkFrame):
         for column in range(5):
             form.grid_columnconfigure(column, weight=1)
 
-        self.bill_id = FormField(form, "Bill ID", required=True)
-        self.bill_id.grid(row=0, column=0, sticky="ew", padx=12, pady=12)
+        self.bill = SearchableDropdown(form, "Bill", required=True)
+        self.bill.grid(row=0, column=0, sticky="ew", padx=12, pady=12)
         self.amount = FormField(form, "Amount", required=True, placeholder="1000.00")
         self.amount.grid(row=0, column=1, sticky="ew", padx=12, pady=12)
-        self.received_date = FormField(
-            form,
-            "Received Date",
-            required=True,
-            placeholder="YYYY-MM-DD",
-        )
+        self.received_date = DatePickerField(form, "Received Date", required=True)
         self.received_date.grid(row=0, column=2, sticky="ew", padx=12, pady=12)
         self.payment_mode = FormField(form, "Payment Mode", placeholder="bank")
         self.payment_mode.grid(row=0, column=3, sticky="ew", padx=12, pady=12)
@@ -92,10 +103,11 @@ class CollectionView(ctk.CTkFrame):
             padx=(0, 8),
         )
 
-        self.table = DataTable(self, self.COLUMNS)
+        self.table = DataTable(self, self.COLUMNS, empty_message="No collections found.")
         self.table.grid(row=4, column=0, sticky="nsew", padx=24, pady=(0, 24))
 
     def _refresh(self, search_text: str = "") -> None:
+        self.bill.set_choices(self._lookup_controller.open_bills())
         search = search_text if search_text else self.search_box.get()
         self._collections = self._controller.list_collections(search)
         self.table.set_rows(
@@ -112,10 +124,9 @@ class CollectionView(ctk.CTkFrame):
 
     def _record_collection(self) -> None:
         self.message_label.configure(text="")
-        try:
-            bill_id = int(self.bill_id.get())
-        except ValueError:
-            self.message_label.configure(text="Bill ID must be a number")
+        bill_id = self.bill.get_selected_id()
+        if bill_id is None:
+            self.message_label.configure(text="Select an unpaid or partially paid bill.")
             return
 
         error = self._controller.record(
@@ -135,12 +146,15 @@ class CollectionView(ctk.CTkFrame):
 
     def _clear_form(self) -> None:
         for field in (
-            self.bill_id,
+            self.bill,
             self.amount,
             self.received_date,
             self.payment_mode,
             self.notes,
         ):
-            field.input.delete(0, "end")
+            if hasattr(field, "input"):
+                field.input.delete(0, "end")
+            else:
+                field.clear()
             field.clear_error()
         self.message_label.configure(text="")

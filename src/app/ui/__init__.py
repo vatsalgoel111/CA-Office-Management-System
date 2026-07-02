@@ -3,6 +3,7 @@
 from app.ui.components import (
     ConfirmationDialog,
     DataTable,
+    DatePickerField,
     FormField,
     IconButton,
     InfoCard,
@@ -10,6 +11,7 @@ from app.ui.components import (
     NotificationToast,
     PrimaryButton,
     SearchBox,
+    SearchableDropdown,
     SecondaryButton,
     Sidebar,
     StatusBadge,
@@ -36,6 +38,7 @@ from app.ui.work_view import WorkView
 __all__ = [
     "ConfirmationDialog",
     "DataTable",
+    "DatePickerField",
     "AuditView",
     "AppShell",
     "BackupView",
@@ -56,6 +59,7 @@ __all__ = [
     "ReportView",
     "ReminderView",
     "SearchBox",
+    "SearchableDropdown",
     "SecondaryButton",
     "SettingView",
     "Sidebar",

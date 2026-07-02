@@ -1,19 +1,26 @@
 # -*- mode: python ; coding: utf-8 -*-
 
+import os
 from PyInstaller.utils.hooks import collect_data_files
 
-
 block_cipher = None
+
+# Directory containing this spec file
+SPEC_DIR = SPECPATH
+
+# Project root (one level above the packaging folder)
+PROJECT_ROOT = os.path.abspath(os.path.join(SPEC_DIR, ".."))
+
 customtkinter_datas = collect_data_files("customtkinter")
+
 app_datas = [
-    ("src/app/database/schema.sql", "app/database"),
-    ("src/app/database/seed.sql", "app/database"),
+    (os.path.join(PROJECT_ROOT, "src", "app", "database", "schema.sql"), "app/database"),
+    (os.path.join(PROJECT_ROOT, "src", "app", "database", "seed.sql"), "app/database"),
 ]
 
-
 a = Analysis(
-    ["src/app/main.py"],
-    pathex=["src"],
+    [os.path.join(PROJECT_ROOT, "src", "app", "main.py")],
+    pathex=[os.path.join(PROJECT_ROOT, "src")],
     binaries=[],
     datas=customtkinter_datas + app_datas,
     hiddenimports=[],
@@ -21,12 +28,10 @@ a = Analysis(
     hooksconfig={},
     runtime_hooks=[],
     excludes=[],
-    win_no_prefer_redirects=False,
-    win_private_assemblies=False,
-    cipher=block_cipher,
     noarchive=False,
 )
-pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
+
+pyz = PYZ(a.pure)
 
 exe = EXE(
     pyz,
@@ -34,24 +39,13 @@ exe = EXE(
     [],
     exclude_binaries=True,
     name="CAOfficeCMS",
-    debug=False,
-    bootloader_ignore_signals=False,
-    strip=False,
-    upx=True,
     console=False,
-    disable_windowed_traceback=False,
-    argv_emulation=False,
-    target_arch=None,
-    codesign_identity=None,
-    entitlements_file=None,
 )
+
 coll = COLLECT(
     exe,
     a.binaries,
     a.zipfiles,
     a.datas,
-    strip=False,
-    upx=True,
-    upx_exclude=[],
     name="CAOfficeCMS",
 )
