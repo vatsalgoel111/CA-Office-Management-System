@@ -18,6 +18,7 @@ from app.ui.components import (
 from app.ui.app_shell import AppShell
 from app.ui.billing_view import BillingView
 from app.ui.client_view import ClientView
+from app.ui.collection_view import CollectionView
 from app.ui.dashboard_view import DashboardView
 from app.ui.login_view import LoginView
 from app.ui.navigation import NavigationItem, NavigationShell
@@ -32,6 +33,7 @@ __all__ = [
     "AppShell",
     "BillingView",
     "ClientView",
+    "CollectionView",
     "DashboardView",
     "FormField",
     "IconButton",

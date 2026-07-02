@@ -2,10 +2,10 @@
 
 ## Current
 
-- Module 8 complete.
+- Module 9 complete.
 
 ## Next
 
-- Module 9: Collection Tracking Foundation.
-- Build collection entry, bill payment status updates, collection listing, and validation.
-- Keep advanced ageing reports for the reporting module.
+- Module 10: Reports and Export Foundation.
+- Build summary report services and export-friendly data queries.
+- Keep PDF/Excel formatting polish for the dedicated reporting/export iteration.

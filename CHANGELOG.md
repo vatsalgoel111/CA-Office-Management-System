@@ -37,3 +37,5 @@ All notable project changes will be documented here.
 - Added Module 7 review documentation.
 - Added billing model, repository, service, controller, view, route wiring, and billing tests.
 - Added Module 8 review documentation.
+- Added collection model, repository, service, controller, view, route wiring, and collection tests.
+- Added Module 9 review documentation.
