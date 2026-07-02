@@ -2,10 +2,9 @@
 
 ## Current
 
-- Module 14 complete.
+- Module 15 complete.
 
 ## Next
 
-- Module 15: Settings Foundation.
-- Build settings repository/service/view for editable application settings.
-- Keep advanced settings sections for future hardening.
+- Deployment preparation and integration hardening.
+- Run full integration review, update deployment documentation, and prepare packaging checklist.

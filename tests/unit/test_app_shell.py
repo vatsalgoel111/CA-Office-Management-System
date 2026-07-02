@@ -67,6 +67,10 @@ class AppShellTest(unittest.TestCase):
             PermissionCode.SETTINGS_MANAGE.value,
         )
         self.assertEqual(
+            items["settings"].required_permission,
+            PermissionCode.SETTINGS_MANAGE.value,
+        )
+        self.assertEqual(
             items["work"].required_permission,
             (
                 PermissionCode.WORK_VIEW_ALL.value,
@@ -92,6 +96,7 @@ class AppShellTest(unittest.TestCase):
             NotificationView,
             ReportView,
             ReminderView,
+            SettingView,
             StaffView,
             WorkView,
         )
@@ -102,6 +107,7 @@ class AppShellTest(unittest.TestCase):
         self.assertIsNotNone(DashboardView)
         self.assertIsNotNone(ReportView)
         self.assertIsNotNone(ReminderView)
+        self.assertIsNotNone(SettingView)
         self.assertIsNotNone(ClientView)
         self.assertIsNotNone(CollectionView)
         self.assertIsNotNone(NotificationView)

@@ -19,6 +19,7 @@ from app.controllers.dashboard_controller import DashboardController
 from app.controllers.notification_controller import NotificationController
 from app.controllers.report_controller import ReportController
 from app.controllers.reminder_controller import ReminderController
+from app.controllers.setting_controller import SettingController
 from app.controllers.staff_controller import StaffController
 from app.controllers.work_controller import WorkController
 from app.database.connection import DatabaseConnectionManager
@@ -32,6 +33,7 @@ from app.repositories.dashboard_repository import DashboardRepository
 from app.repositories.notification_repository import NotificationRepository
 from app.repositories.report_repository import ReportRepository
 from app.repositories.reminder_repository import ReminderRepository
+from app.repositories.setting_repository import SettingRepository
 from app.repositories.user_repository import UserRepository
 from app.repositories.work_repository import WorkRepository
 from app.services.audit_service import AuditService
@@ -43,6 +45,7 @@ from app.services.dashboard_service import DashboardService
 from app.services.notification_service import NotificationService
 from app.services.report_service import ReportService
 from app.services.reminder_service import ReminderService
+from app.services.setting_service import SettingService
 from app.services.staff_service import StaffService
 from app.services.work_service import WorkService
 from app.ui.audit_view import AuditView
@@ -55,6 +58,7 @@ from app.ui.navigation import NavigationItem, NavigationShell
 from app.ui.notification_view import NotificationView
 from app.ui.report_view import ReportView
 from app.ui.reminder_view import ReminderView
+from app.ui.setting_view import SettingView
 from app.ui.staff_view import StaffView
 from app.ui.theme import theme_manager
 from app.ui.work_view import WorkView
@@ -93,6 +97,7 @@ class AppShell(ctk.CTkFrame):
         NavigationItem("audit", "Audit", PermissionCode.AUDIT_VIEW.value),
         NavigationItem("backups", "Backups", PermissionCode.BACKUP_CREATE.value),
         NavigationItem("notifications", "Notifications", PermissionCode.SETTINGS_MANAGE.value),
+        NavigationItem("settings", "Settings", PermissionCode.SETTINGS_MANAGE.value),
     )
 
     def __init__(
@@ -147,6 +152,10 @@ class AppShell(ctk.CTkFrame):
         )
         self.notification_controller = NotificationController(
             NotificationService(NotificationRepository(database)),
+            session,
+        )
+        self.setting_controller = SettingController(
+            SettingService(SettingRepository(database)),
             session,
         )
         self.grid_columnconfigure(0, weight=1)
@@ -241,6 +250,13 @@ class AppShell(ctk.CTkFrame):
 
         if route_key == "notifications":
             NotificationView(self.shell.content, self.notification_controller).pack(
+                fill="both",
+                expand=True,
+            )
+            return
+
+        if route_key == "settings":
+            SettingView(self.shell.content, self.setting_controller).pack(
                 fill="both",
                 expand=True,
             )

@@ -49,3 +49,5 @@ All notable project changes will be documented here.
 - Added Module 13 review documentation.
 - Added notification queue model, repository, service, controller, view, route wiring, and notification tests.
 - Added Module 14 review documentation.
+- Added settings model, repository, service, controller, view, route wiring, and settings tests.
+- Added Module 15 review documentation.
